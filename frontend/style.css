@@ -1,0 +1,671 @@
+/* Fullscreen map */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Cabin", sans-serif;
+}
+
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 20px 40px;
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+  z-index: 5;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+header h1 {
+  font-family: "rl-horizon", sans-serif;
+  font-weight: 700;
+  font-size: 3rem;
+  margin: 0;
+  color: #555775;
+}
+
+header h4 {
+  font-family: "elizeth-condensed", serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: #555775;
+  margin: 0.25rem 0;
+}
+
+header h5 {
+  font-family: "elizeth-condensed", serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1rem;
+  color: #555775;
+  margin: 0.25rem 0;
+}
+
+#map {
+  width: 100vw;
+  height: 100vh;
+  margin-top: 150px;
+}
+
+/* Side Panel Toggle Button */
+.toggle-panel-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 15;
+  transition: all 0.2s ease;
+  color: #333;
+  font-weight: bold;
+}
+
+.toggle-panel-btn:hover {
+  background: #f5f5f5;
+  transform: scale(1.05);
+}
+
+/* Side Panel */
+.side-panel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 350px;
+  background: white;
+  box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+  z-index: 18;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.side-panel.open {
+  transform: translateX(0);
+}
+
+.panel-header {
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.panel-header h2 {
+  font-family: "rl-horizon", sans-serif;
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.3rem;
+  color: #555775;
+}
+
+.close-panel-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.close-panel-btn:hover {
+  color: #333;
+}
+
+.spots-list {
+  padding: 10px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.spot-item {
+  padding: 15px;
+  margin-bottom: 10px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #4264fb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.spot-item:hover {
+  background: #f0f0f0;
+  transform: translateX(5px);
+}
+
+.spot-item-title {
+  font-family: "rl-horizon", sans-serif;
+  font-weight: 700;
+  color: #555775;
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.spot-item-rating {
+  color: #FFFF99 !important;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.spot-item-notes {
+  color: #666;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 0 0 8px 0;
+}
+
+.spot-item-amenities {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.spot-amenity-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #e8f4fd;
+  border: 1px solid #4264fb;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Search Box */
+.search-container {
+  position: absolute;
+  top: 100px;
+  right: 20px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  width: auto;
+}
+
+.search-container > div:first-child {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#searchInput {
+  width: 200px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: "rl-horizon", sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  background: white;
+}
+
+#searchInput::placeholder {
+  font-family: "rl-horizon", sans-serif;
+}
+
+#searchBtn {
+  padding: 10px 15px;
+  background: #C3C3F2;
+  color: #555775;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: "rl-horizon", sans-serif;
+}
+
+#searchBtn:hover {
+  background: #f5f5f5;
+  border-color: #333;
+  color: #333;
+}
+
+/* Suggestions Dropdown */
+.suggestions-list {
+  position: relative;
+  width: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  max-height: 300px;
+  overflow-y: auto;
+  display: none;
+  margin-top: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.suggestions-list.active {
+  display: block;
+}
+
+.suggestion-item {
+  padding: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #333;
+}
+
+.suggestion-item:hover {
+  background: #f5f5f5;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-text {
+  font-weight: 500;
+}
+
+.suggestion-address {
+  font-size: 12px;
+  color: #999;
+}
+
+/* Modal Form Styling */
+.modal-form {
+  position: absolute;
+  top: 100px;
+  left: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  display: none;
+  z-index: 20;
+  width: 380px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+.modal-form.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #333;
+  font-family: "rl-horizon", sans-serif;
+}
+
+.modal-header p {
+  margin: 6px 0 0 0;
+  color: #666;
+  font-size: 0.9rem;
+  font-family: "Cabin", sans-serif;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+  max-height: 300px;
+}
+
+.modal-body fieldset {
+  margin-bottom: 15px;
+  border: none;
+  padding: 0;
+}
+
+.modal-body fieldset:last-child {
+  margin-bottom: 0;
+}
+
+.modal-body label {
+  display: block;
+  margin-bottom: 6px;
+  color: #333;
+  font-weight: 500;
+  font-size: 0.95rem;
+  font-family: "rl-horizon", sans-serif;
+}
+
+/* Amenities fieldset special styling */
+.amenities-fieldset label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 400;
+  gap: 8px;
+}
+
+.amenities-fieldset label input {
+  width: auto;
+  margin: 0;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: #4264fb;
+}
+
+.amenities-fieldset label span {
+  font-size: 0.9rem;
+}
+
+.amenities-fieldset legend {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 8px;
+  width: 100%;
+  padding: 0;
+  font-family: "rl-horizon", sans-serif;
+}
+
+.modal-body input,
+.modal-body textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: "Cabin", sans-serif;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.modal-body select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: "Cabin", sans-serif;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  background: white;
+  cursor: pointer;
+}
+
+.modal-body input:focus,
+.modal-body textarea:focus {
+  outline: none;
+  border-color: #4264fb;
+  box-shadow: 0 0 0 3px rgba(66, 100, 251, 0.1);
+}
+
+.modal-body textarea {
+  height: 100px;
+  resize: none;
+}
+
+.modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-save,
+.btn-cancel,
+.btn-delete {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  font-family: "rl-horizon", sans-serif;
+}
+
+.btn-save {
+  background: #C3C3F2;
+  color: #555775;
+}
+
+.btn-save:hover {
+  background: #A9A5D8;
+}
+
+.btn-cancel {
+  background: #D3D3D3;
+  color: #555775;
+}
+
+.btn-cancel:hover {
+  background: #B3B3B3;
+}
+
+/* Modal Info Card Styling */
+.modal-info {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  display: none;
+  z-index: 20;
+  width: 380px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+.modal-info.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-info .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-info .modal-header h2 {
+  font-family: "rl-horizon", sans-serif;
+  font-weight: 700;
+  margin: 0;
+  font-size: 1.3rem;
+  color: #555775;
+  flex-grow: 1;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.rating-display {
+  color: #FFFF99 !important;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.modal-info .modal-body {
+  padding: 20px;
+  color: #666;
+  font-size: 0.95rem;
+  max-height: none;
+  overflow-y: auto;
+}
+
+.modal-info .modal-body p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.modal-info .modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  gap: 10px;
+}
+
+.btn-delete {
+  background: hsl(0, 73%, 84%);
+  color: #555775;
+  flex: 1;
+  border: 1px solid #555775;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: 500;
+  font-family: "rl-horizon", sans-serif;
+  transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+  background: #f5f5f5;
+  border-color: #333;
+  color: #333;
+}
+
+.btn-edit {
+  background: #C3C3F2;
+  color: #555775;
+  flex: 1;
+  border: 1px solid #555775;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: 500;
+  font-family: "rl-horizon", sans-serif;
+  transition: all 0.2s ease;
+}
+
+.btn-edit:hover {
+  background: #f5f5f5;
+  border-color: #333;
+  color: #333;
+}
+
+/* Amenities display styling */
+.amenities-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.amenity-tag {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #e0e0ff;
+  border: 1px solid #9791C2;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Spot Type Colors */
+.modal-info.cafe,
+.spot-item.cafe {
+  background: #FFCE9F !important;
+  border-color: #FFAD5C !important;
+  color: #000 !important;
+}
+
+.modal-info.cafe *:not(.rating-display):not(.spot-item-rating),
+.spot-item.cafe *:not(.rating-display):not(.spot-item-rating) {
+  color: #000 !important;
+}
+
+.modal-info.library,
+.spot-item.library {
+  background: #A5D1D9 !important;
+  border-color: #72A9B3 !important;
+  color: #000 !important;
+}
+
+.modal-info.library *:not(.rating-display):not(.spot-item-rating),
+.spot-item.library *:not(.rating-display):not(.spot-item-rating) {
+  color: #000 !important;
+}
+
+.modal-info.park,
+.spot-item.park {
+  background: #AAD19A !important;
+  border-color: #80B06D !important;
+  color: #000 !important;
+}
+
+.modal-info.park *:not(.rating-display):not(.spot-item-rating),
+.spot-item.park *:not(.rating-display):not(.spot-item-rating) {
+  color: #000 !important;
+}
+
+.modal-info.coworking,
+.spot-item.coworking {
+  background: #FBAFB8 !important;
+  border-color: #FF8875 !important;
+  color: #000 !important;
+}
+
+.modal-info.coworking *:not(.rating-display):not(.spot-item-rating),
+.spot-item.coworking *:not(.rating-display):not(.spot-item-rating) {
+  color: #000 !important;
+}
+
+.modal-info.other,
+.spot-item.other {
+  background: #D9BEA5 !important;
+  border-color: #8D5B4C !important;
+  color: #000 !important;
+}
+
+.modal-info.other *:not(.rating-display):not(.spot-item-rating),
+.spot-item.other *:not(.rating-display):not(.spot-item-rating) {
+  color: #000 !important;
+}

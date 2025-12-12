@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Study Spots</title>
+    <link rel="icon" type="image/png" href="StudySpot.png">
+
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/zpp1eal.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Study Spots</h1>
+        <h4>The space to find your ideal spot to concentrate</h4>
+        <h5>By Belinda & Lucy</h5>
+    </header>
+
+    <div id="map"></div>
+
+    <!-- Side Panel Toggle Button -->
+    <button id="togglePanelBtn" class="toggle-panel-btn" title="View saved spots">
+        ☰
+    </button>
+
+    <!-- Side Panel -->
+    <div id="sidePanel" class="side-panel">
+        <div class="panel-header">
+            <h2>Saved Spots</h2>
+            <button id="closePanelBtn" class="close-panel-btn">×</button>
+        </div>
+        <div id="spotsList" class="spots-list">
+            <!-- Spots will be populated here -->
+        </div>
+    </div>
+
+    <!-- Search Bar with Suggestions -->
+    <div id="searchBox" class="search-container">
+        <div>
+            <input id="searchInput" type="text" placeholder="Search for a place..." />
+            <button id="searchBtn">Search</button>
+        </div>
+        <div id="suggestions" class="suggestions-list"></div>
+    </div>
+
+    <!-- Form Box (Modal Dialog) -->
+    <div id="formBox" class="modal-form">
+        <div class="modal-header">
+            <h2>Add Study Spot</h2>
+            <p>Share details about this study location</p>
+        </div>
+        <div class="modal-body">
+            <fieldset>
+                <label for="spotType">Type of Spot</label>
+                <select id="spotType" required>
+                    <option value="">Select a type...</option>
+                    <option value="cafe">Cafe</option>
+                    <option value="library">Library</option>
+                    <option value="park">Park</option>
+                    <option value="coworking">Co-Working Space</option>
+                    <option value="other">Other</option>
+                </select>
+            </fieldset>
+            <fieldset>
+                <label for="titleInput">Spot Name</label>
+                <input id="titleInput" type="text" placeholder="e.g. The Daily Brew" required />
+            </fieldset>
+            <fieldset>
+                <label for="notesInput">Notes</label>
+                <textarea id="notesInput" placeholder="Describe this study spot..."></textarea>
+            </fieldset>
+            <fieldset>
+                <label for="ratingInput">Rating</label>
+                <input id="ratingInput" type="number" min="1" max="5" placeholder="Rate 1-5 stars" />
+            </fieldset>
+            <fieldset class="amenities-fieldset">
+                <legend>Amenities</legend>
+                <label for="hasWifi">
+                    <input type="checkbox" id="hasWifi" name="hasWifi" />
+                    <span>📶 WiFi</span>
+                </label>
+                <label for="hasOutlets">
+                    <input type="checkbox" id="hasOutlets" name="hasOutlets" />
+                    <span>🔌 Outlets</span>
+                </label>
+                <label for="hasIndoorSeating">
+                    <input type="checkbox" id="hasIndoorSeating" name="hasIndoorSeating" />
+                    <span>🪑 Indoor Seating</span>
+                </label>
+                <label for="hasOutdoorSeating">
+                    <input type="checkbox" id="hasOutdoorSeating" name="hasOutdoorSeating" />
+                    <span>🌳 Outdoor Seating</span>
+                </label>
+                <label for="isQuiet">
+                    <input type="checkbox" id="isQuiet" name="isQuiet" />
+                    <span>🤫 Quiet</span>
+                </label>
+                <label for="hasFood">
+                    <input type="checkbox" id="hasFood" name="hasFood" />
+                    <span>🍕 Food Available</span>
+                </label>
+            </fieldset>
+        </div>
+        <div class="modal-footer">
+            <button id="submitBtn" class="btn-save">Save Spot</button>
+            <button id="cancelBtn" class="btn-cancel">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Info Card (Modal) -->
+    <div id="infoCard" class="modal-info">
+        <div class="modal-header">
+            <h2 id="cardTitle"></h2>
+            <button id="closeCard" class="close-btn">×</button>
+        </div>
+        <div class="modal-body">
+            <div id="cardRating" class="rating-display"></div>
+            <p id="cardNotes"></p>
+            <div id="cardAmenities" class="amenities-display"></div>
+        </div>
+        <div class="modal-footer">
+            <button id="editBtn" class="btn-edit">Edit</button>
+            <button id="deleteBtn" class="btn-delete">Delete</button>
+        </div>
+    </div>
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

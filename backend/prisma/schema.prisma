@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Marker {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  spotType  String   @default("other")
+  notes     String?
+  rating    Int?
+  latitude  Float
+  longitude Float
+  hasWifi   Boolean  @default(false)
+  hasOutlets Boolean @default(false)
+  hasIndoorSeating Boolean @default(false)
+  hasOutdoorSeating Boolean @default(false)
+  isQuiet   Boolean  @default(false)
+  hasFood   Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
