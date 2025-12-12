@@ -218,7 +218,7 @@ document.getElementById("submitBtn").onclick = async () => {
   const submitBtn = document.getElementById("submitBtn");
   const editingId = submitBtn.dataset.editingId;
   const method = editingId ? "PUT" : "POST";
-  const endpoint = editingId ? `http://localhost:4000/markers/${editingId}` : "http://localhost:4000/markers";
+  const endpoint = editingId ? `/markers/${editingId}` : `/markers`;
 
   const payload = {
     title,
@@ -325,7 +325,7 @@ document.getElementById("deleteBtn").onclick = async () => {
   if (!confirm("Are you sure you want to delete this spot?")) return;
 
   try {
-    const response = await fetch(`http://localhost:4000/markers/${selectedMarkerId}`, {
+    const response = await fetch(`/markers/${selectedMarkerId}`, {
       method: "DELETE"
     });
 
@@ -383,7 +383,7 @@ document.getElementById("editBtn").onclick = async () => {
 // ===== LOAD EXISTING MARKERS =====
 async function loadMarkers() {
   try {
-    const res = await fetch("http://localhost:4000/markers");
+    const res = await fetch("/markers");
     if (!res.ok) throw new Error(`Server error: ${res.status}`);
     
     const markers = await res.json();
