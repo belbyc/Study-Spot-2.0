@@ -1,4 +1,4 @@
 {
   "version": 2,
-  "public": "frontend"
+  "buildCommand": "npm install && cd backend && npm install"
 }
