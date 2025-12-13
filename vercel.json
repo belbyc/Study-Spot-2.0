@@ -1,5 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "npm install && npx prisma generate && cd backend && npm install",
+  "buildCommand": "npm install && npm run postinstall && cd backend && npm install",
   "outputDirectory": "frontend"
 }
