@@ -8,7 +8,7 @@
     "install-all": "npm install && cd backend && npm install",
     "dev": "cd backend && npm run dev",
     "start": "cd backend && node server.js",
-    "postinstall": "prisma generate"
+    "postinstall": "PRISMA_SCHEMA_PATH=./backend/prisma/schema.prisma prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.16.1"
