@@ -14,8 +14,11 @@ export default async function handler(req, res) {
   }
 
   const { id } = req.query;
-
+  
   try {
+    console.log("DATABASE_URL:", process.env.DATABASE_URL ? "✓ Set" : "✗ Not set");
+    console.log("Processing request for marker ID:", id);
+    
     if (req.method === 'PUT') {
       const { title, spotType, notes, rating, hasWifi, hasOutlets, hasIndoorSeating, hasOutdoorSeating, isQuiet, hasFood } = req.body;
 
@@ -53,6 +56,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   } catch (error) {
     console.error("Error:", error);
-    return res.status(500).json({ error: error.message || "Internal server error" });
+    return res.status(500).json({ error: error.message || "Internal server error", details: error.toString() });
   }
 }
