@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "Study spots map application",
   "main": "backend/server.js",
+  "type": "module",
   "scripts": {
     "install-all": "npm install && cd backend && npm install",
     "dev": "cd backend && npm run dev",
     "start": "cd backend && node server.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.16.1"
   },
   "keywords": [],
   "author": "",
