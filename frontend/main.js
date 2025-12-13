@@ -284,7 +284,7 @@ document.getElementById("submitBtn").onclick = async () => {
     }
   } catch (error) {
     console.error("Error saving marker:", error);
-    alert("Error saving spot. Make sure your backend is running on http://localhost:4000");
+    alert("Error saving spot. Make sure the backend API is running.");
   }
 };
 
